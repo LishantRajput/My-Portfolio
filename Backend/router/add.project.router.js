@@ -9,15 +9,14 @@ const uploadToGithub = require("../utils/uploadToGithub");
 
 const router = express.Router();
 
-router.post(
-  "/add/jsx/project",
+router.post("/add/jsx/project",
   upload.fields([
     { name: "uiTemplate", maxCount: 1 },
     { name: "jsxCode", maxCount: 1 },
   ]),
   async (req, res) => {
     try {
-      // ✅ Required fields check
+      //  Required fields check
       if (!req.files?.uiTemplate || !req.files?.jsxCode) {
         if (req.files) {
           Object.values(req.files).forEach((fileArray) => {
@@ -31,7 +30,6 @@ router.post(
         });
       }
 
-      // ✅ File validation (.jsx only)
       if (path.extname(req.files.jsxCode[0].originalname) !== ".jsx") {
         Object.values(req.files).forEach((fileArray) => {
           fileArray.forEach((file) => fs.unlinkSync(file.path));
@@ -43,7 +41,7 @@ router.post(
         });
       }
 
-      // ✅ File paths
+      //  File paths
       const uiTemplatePath = req.files.uiTemplate[0].path;
       const jsxFilePath = req.files.jsxCode[0].path;
 
@@ -57,7 +55,7 @@ router.post(
         });
       }
 
-      // ✅ Upload JSX to GitHub
+      //  Upload JSX to GitHub
       const fileName = Date.now() + "-" + req.files.jsxCode[0].originalname;
       const gitRes = await uploadToGithub(jsxFilePath, fileName);
 
@@ -74,7 +72,7 @@ router.post(
         });
       }
 
-      // ✅ Delete local file after upload
+      //  Delete local file after upload
       if (fs.existsSync(jsxFilePath)) {
         fs.unlinkSync(jsxFilePath);
       }

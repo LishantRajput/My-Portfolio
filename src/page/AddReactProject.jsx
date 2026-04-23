@@ -44,7 +44,7 @@ const AddReactProject = () => {
         errorEmitter(data.message);
       }
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
       errorEmitter("Something went wrong");
     }
   };

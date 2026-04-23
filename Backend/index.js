@@ -1,13 +1,21 @@
 const express = require("express")
 const dbconnection = require("./conection");
 const cors = require('cors')
-
+const fs = require("fs")
+const path = require("path")
 require("dotenv").config()
+
+const uploadDir = path.join("Backend","uploads");
+if(!fs.existsSync(uploadDir)){
+  fs.mkdirSync(uploadDir, {recursive: true });
+}
+
+
 const app = express()
 app.use(cors({
   origin: [
     "https://lishantrajput.netlify.app",
-    "http://localhost:5173/"
+    "http://localhost:5173"
   ]
 }));
 app.use(express.json())
