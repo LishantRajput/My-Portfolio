@@ -1,0 +1,1 @@
+export const BASE_URL = "http://localhost:2005/api/v1.0/portfoliyo"
