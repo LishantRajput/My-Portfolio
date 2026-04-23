@@ -7,10 +7,6 @@ const Login = () => {
   const navigate = useNavigate()
   const { islogin, setIslogin, loader, setLoader } = useAuthState()
   const [loginData, setLoginData] = useState({ username: "", password: "" })
-
-// useEffect(
-//   navigate("/"), [islogin]
-// )
   const changeHandler = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value })
   }
@@ -20,6 +16,7 @@ const Login = () => {
     e.preventDefault()
 
     try {
+      console.log("req sent")
       const res = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
@@ -38,6 +35,7 @@ const Login = () => {
         errorEmitter(data.message)
       }
     } catch (error) {
+      errorEmitter("Server Error")
       console.log(error.message)
 
     } finally {

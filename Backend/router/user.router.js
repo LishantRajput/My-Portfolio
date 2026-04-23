@@ -2,7 +2,6 @@ const express = require("express")
 const bcrypt = require("bcrypt")
 const router = express.Router()
 const jwt = require("jsonwebtoken")
-const nodemailer = require("nodemailer");
 const userModel = require("../schema/usermodel")
 const SECRET_KEY = "21fd54sf5f4h54t6e4u45fd4g32da1g5er4y654fg1jg24j5t4iu6f1j5hg4img34u6yt4s32d1g3df54h8tj61gh5j4hy8"
 
@@ -165,46 +164,6 @@ router.post("/reset/pass", async (req, res) => {
     }
 })
 
-// router.post("/verifyotp", async (req, res) => {
-//   try {
-//     const { email, otp } = req.body;
-
-//     const user = await userModel.findOne({ email });
-
-//     if (!user) {
-//       return res.status(400).send({
-//         success: false,
-//         message: "User not found"
-//       });
-//     }
-
-//     // ❌ OTP wrong
-//     if (user.otp != otp) {
-//       return res.status(400).send({
-//         success: false,
-//         message: "Invalid OTP"
-//       });
-//     }
-
-//     // ❌ OTP expired
-//     if (user.otpExpire < Date.now()) {
-//       return res.status(400).send({
-//         success: false,
-//         message: "OTP expired"
-//       });
-//     }
-
-//     res.send({
-//       success: true,
-//       message: "OTP verified"
-//     });
-
-//   } catch (error) {
-//     res.send(error);
-//   }
-// });
-
-
 router.post("/new-password", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -241,8 +200,7 @@ router.post("/new-password", async (req, res) => {
 router.post("/login", async (req, res) => {
     const { username, password } = req.body
     let user;
-    try {
-        console.log("Check all fields")    
+    try {  
         if (!username || !password) { 
             return res.status(404).send({
                 success: false,
@@ -293,7 +251,5 @@ router.post("/login", async (req, res) => {
         })
     }
 })
-
-
 
 module.exports = router

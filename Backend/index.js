@@ -10,13 +10,12 @@ app.use(cors({
     "http://localhost:5173/"
   ]
 }));
-// app.use(cors())
 app.use(express.json())
 dbconnection()
 app.get("/",(req, res)=>res.send("wellcome"))
-app.use("/api/v1.0/portfoliyo/auth",require("./router/user.router"))
-app.use("/api/v1.0/portfoliyo/auth",require("./router/add.project.router"))
-app.use("/api/v1.0/portfoliyo/",require("./router/render.project"))
+app.use("/api/v1.0/portfolio/auth",require("./router/user.router"))
+app.use("/api/v1.0/portfolio/auth",require("./router/add.project.router"))
+app.use("/api/v1.0/portfolio/",require("./router/render.project"))
 
 
 app.listen(2005,()=>console.log("server run on port http://localhost:2005")) 
