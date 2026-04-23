@@ -4,7 +4,14 @@ const cors = require('cors')
 
 require("dotenv").config()
 const app = express()
-app.use(cors())
+app.use(cors({
+  origin: [
+    "https://lishantrajput.netlify.app",
+    // "http://localhost:5173"
+    "http://localhost:5173/"
+  ]
+}));
+// app.use(cors())
 app.use(express.json())
 dbconnection()
 app.get("/",(req, res)=>res.send("wellcome"))
