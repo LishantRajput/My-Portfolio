@@ -20,12 +20,12 @@ function Contact() {
 
           <div>
             <p className="text-gray-400">Phone Number</p>
-            <h3 className="text-lg font-semibold">+91 9876543210</h3>
+            <h3 className="text-lg font-semibold">+91 9110089184</h3>
           </div>
 
           <div>
             <p className="text-gray-400">Email</p>
-            <h3 className="text-lg font-semibold">raj@email.com</h3>
+            <h3 className="text-lg font-semibold">rlishant@email.com</h3>
           </div>
 
           {/* Social Icons */}

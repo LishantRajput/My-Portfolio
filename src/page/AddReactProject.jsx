@@ -65,6 +65,7 @@ const AddReactProject = () => {
             <input
               type="file"
               name="uiTemplate"
+              accept="image/*"
               onChange={handleChange}
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
@@ -80,6 +81,7 @@ const AddReactProject = () => {
             <input
               type="file"
               name="jsxCode"
+              accept=".jsx"
               onChange={handleChange}
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0

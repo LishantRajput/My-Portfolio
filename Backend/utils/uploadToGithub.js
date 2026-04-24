@@ -22,15 +22,18 @@ const uploadToGithub = async (filePath, fileName) => {
         },
       }
     );
-
-    return response.data;
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+    return response.data.content;
   } catch (err) {
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
     console.log("line no 25 uploadtogithub \n");
     console.log("GitHub Error:", err.response?.data || err.message);
     return false
   }
-
-
 
 }
 

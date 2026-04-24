@@ -5,55 +5,74 @@ import { BASE_URL } from "../BaseUrl";
 import { useAuthState } from "../contextapi/AuthState";
 
 const AddHtmlProject = () => {
-  const { islogin } = useAuthState()
-  const navigate = useNavigate()
+  const { loader,islogin,setLoader } = useAuthState();
+  const navigate = useNavigate();
+
+  const [files, setFiles] = useState({
+    uiTemplate: null,
+    htmlCode: null,
+    cssCode: null,
+  });
+
+  // Auth check
   useEffect(() => {
     if (!islogin) {
       navigate("/");
     }
   }, [islogin, navigate]);
-  const [files, setFiles] = useState({
-    uiTamplet: null,
-    htmlCode: null,
-    cssCode: null,
-  });
-  const handleChange = (e) => {
+
+  // Handle file change
+ const handleChange = (e) => {
     setFiles({ ...files, [e.target.name]: e.target.files[0] });
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log(files);
-  // };
-
+  //  Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(files)
-    const formData = new FormData();
-    formData.append("uiTamplet", files.uiTamplet);
-    formData.append("htmlCode", files.htmlCode);
-    formData.append("cssCode", files.cssCode);
-    // console.log(formData)
+    
+      console.log("35 start")
+
+    // Validation
+    if (!files.uiTemplate || !files.htmlCode || !files.cssCode) {
+      return errorEmitter("All files are required");
+    }
+    console.log("Lie no 43", files)
 
     try {
-      console.log("Start Try")
+      setLoader(true);
+      console.log("line no 45 start")
+      const formData = new FormData();
+      formData.append("uiTemplate", files.uiTemplate);
+      formData.append("htmlCode", files.htmlCode);
+      formData.append("cssCode", files.cssCode);
+      console.log("line np 51", formData)
       const res = await fetch(`${BASE_URL}/auth/add/htmlcss/project`, {
         method: "POST",
         body: formData,
+        credentials: "include", //  important for auth
       });
 
       const data = await res.json();
-      console.log(data)
-      if (data.sucess) {
-        successEmitter(data.message)
+
+      if (data?.sucess) {
+        successEmitter(data.message || "Project uploaded successfully");
+
+        // 🔄 Reset form
+        setFiles({
+          uiTemplate: null,
+          htmlCode: null,
+          cssCode: null,
+        });
+
       } else {
-        errorEmitter(data.message)
+        errorEmitter(data.message || "Upload failed");
       }
     } catch (err) {
-      console.log("Cathch Block Throug", err);
-      errorEmitter("Catch Block Throug")
+      console.log(err);
+      errorEmitter("Something went wrong");
+    } finally {
+      setLoader(false);
     }
-
   };
 
   return (
@@ -64,57 +83,68 @@ const AddHtmlProject = () => {
           Upload Files
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6" enctype="multipart/form-data">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6"
+          encType="multipart/form-data"
+        >
 
-          {/* uiTamplet Upload */}
+          {/* UI Template */}
           <div>
-            <label className="text-gray-300 text-sm">Upload Ui Template</label>
+            <label className="text-gray-300 text-sm">Upload UI Template</label>
             <input
               type="file"
-              name="uiTamplet"
+              name="uiTemplate"
               onChange={handleChange}
+              accept="image/*"
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
               file:bg-yellow-400 file:text-black
-              hover:file:bg-yellow-500
-              cursor-pointer"
+              hover:file:bg-yellow-500 cursor-pointer"
             />
           </div>
 
+          {/* HTML */}
           <div>
-            <label className="text-gray-300 text-sm">Upload Html Code</label>
+            <label className="text-gray-300 text-sm">Upload HTML Code</label>
             <input
               type="file"
               name="htmlCode"
               onChange={handleChange}
+              accept=".html"
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
               file:bg-green-400 file:text-black
-              hover:file:bg-green-500
-              cursor-pointer"
+              hover:file:bg-green-500 cursor-pointer"
             />
           </div>
 
+          {/* CSS */}
           <div>
-            <label className="text-gray-300 text-sm">Upload Css Code</label>
+            <label className="text-gray-300 text-sm">Upload CSS Code</label>
             <input
               type="file"
               name="cssCode"
               onChange={handleChange}
+              accept=".css"
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
               file:bg-blue-400 file:text-black
-              hover:file:bg-blue-500
-              cursor-pointer"
+              hover:file:bg-blue-500 cursor-pointer"
             />
           </div>
 
+          {/* Button */}
           <button
-            className="w-full py-3 mt-4 rounded-full bg-gradient-to-r 
-            from-yellow-400 to-orange-500 text-black font-semibold 
-            shadow-lg hover:scale-105 transition duration-300"
+            type="submit"
+            disabled={loader}
+            className={`w-full py-3 mt-4 rounded-full font-semibold shadow-lg transition duration-300
+              ${loader
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-gradient-to-r from-yellow-400 to-orange-500 text-black hover:scale-105"
+              }`}
           >
-            Add Project
+            {loader ? "Uploader..." : "Add Project"}
           </button>
 
         </form>

@@ -5,9 +5,9 @@ const fs = require("fs")
 const path = require("path")
 require("dotenv").config()
 
-const uploadDir = path.join("Backend","uploads");
-if(!fs.existsSync(uploadDir)){
-  fs.mkdirSync(uploadDir, {recursive: true });
+const uploadDir = path.join("Backend", "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 
@@ -16,15 +16,16 @@ app.use(cors({
   origin: [
     "https://lishantrajput.netlify.app",
     "http://localhost:5173"
-  ]
+  ],
+  credentials: true
 }));
 app.use(express.json())
 dbconnection()
-app.get("/",(req, res)=>res.send("wellcome"))
-app.use("/api/v1.0/portfolio/auth",require("./router/user.router"))
-app.use("/api/v1.0/portfolio/auth",require("./router/add.project.router"))
-app.use("/api/v1.0/portfolio/",require("./router/render.project"))
+app.get("/", (req, res) => res.send("wellcome"))
+app.use("/api/v1.0/portfolio/auth", require("./router/user.router"))
+app.use("/api/v1.0/portfolio/auth", require("./router/add.project.router"))
+app.use("/api/v1.0/portfolio/", require("./router/render.project"))
 
 
-app.listen(2005,()=>console.log("server run on port http://localhost:2005")) 
+app.listen(2005, () => console.log("server run on port http://localhost:2005"))
 
