@@ -26,16 +26,18 @@ const AddJsProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+console.log("Line no 29",files)
     const formData = new FormData();
-    formData.append("uiTemplate", files.uiTemplate); // ✅ consistent naming
+    formData.append("uiTemplate", files.uiTemplate); // consistent naming
     formData.append("htmlCode", files.htmlCode);
     formData.append("jsCode", files.jsCode);
 
     try {
+      console.log("line no 36",formData)
       const res = await fetch(`${BASE_URL}/auth/add/js/project`, {
         method: "POST",
         body: formData,
+        credentials: "include",
       });
 
       const data = await res.json();
@@ -67,6 +69,7 @@ const AddJsProject = () => {
             <input
               type="file"
               name="uiTemplate"
+              accept="image/*, video/*"
               onChange={handleChange}
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
@@ -82,6 +85,7 @@ const AddJsProject = () => {
             <input
               type="file"
               name="htmlCode"
+              accept=".html"
               onChange={handleChange}
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0
@@ -97,6 +101,7 @@ const AddJsProject = () => {
             <input
               type="file"
               name="jsCode"
+              accept=".js"
               onChange={handleChange}
               className="w-full mt-2 text-gray-400 file:mr-4 file:py-2 file:px-4
               file:rounded-full file:border-0

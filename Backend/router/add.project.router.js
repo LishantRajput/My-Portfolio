@@ -98,6 +98,8 @@ router.post("/add/htmlcss/project",
 
   });
 
+
+
 router.post("/add/js/project",
   upload.fields([
     { name: "uiTemplate", maxCount: 1 },
@@ -105,88 +107,34 @@ router.post("/add/js/project",
     { name: "jsCode", maxCount: 1 },
   ]),
   async (req, res) => {
-    console.log("line no 18")
+    console.log("Line no 110")
     try {
-      if (!req.files?.uiTemplate || !req.files?.htmlCode || !req.files?.jsCode) {
-        if (req.files) {
-          Object.values(req.files).forEach((fileArray) => {
-            fileArray.forEach((file) => fs.unlinkSync(file.path));
-          });
-        }
+      console.log("Line no 112 Try Block Start")
+      // if (!req.files?.uiTemplate.path || !req.files?.htmlCode.path || !req.files?.cssCode.path) {
+      //   if (req.files) {
+      //     Object.values(req.files).forEach((fileArray) => {
+      //       fileArray.forEach((file) => fs.unlinkSync(file.path));
+      //     });
+      //   }
+      // }
 
-        return res.status(400).json({
-          success: false,
-          message: "All files are required",
-        });
-      }
-
-      const uiTemplateLocalPath = req.files.uiTemplate[0].path;
-      const htmlCodeLocalPath = req.files.htmlCode[0].path
-      const jsCodeLocalPath = req.files.jsCode[0].path
-        console.log("Line no 126", uiTemplateLocalPath, htmlCodeLocalPath, jsCodeLocalPath)
-
-      const cloudResult = await uploadFileOnCloud(uiTemplateLocalPath);
-
-        console.log("Line no 130", cloudResult)
-      if (!cloudResult) {
-        return res.status(500).json({
-          success: false,
-          message: "Cloud upload failed",
-        });
-      }
-      const uniqueName = Date.now()
-      const gitHtmlres = await uploadToGithub(htmlCodeLocalPath, uniqueName + "_" + req.files.htmlCode[0].originalname)
-      //   console.log("line no 50", gitHtmlres)
-      if (!gitHtmlres) {
-        await deleteoncloud(cloudResult.public_id);
-
-        if (fs.existsSync(htmlCodeLocalPath)) {
-          fs.unlinkSync(htmlCodeLocalPath);
-        }
-        return res.status(500).json({
-          success: false,
-          message: "GitHub Html upload failed",
-        });
-      }
-      const htmlCode = gitHtmlres.download_url
-      const gitjsres = await uploadToGithub(jsCodeLocalPath, uniqueName + "_" + req.files.jsCode[0].originalname)
-      console.log("line no 63", gitjsres)
-      if (!gitjsres) {
-        await deleteoncloud(cloudResult.public_id);
-
-        if (fs.existsSync(htmlCodeLocalPath)) {
-          fs.unlinkSync(htmlCodeLocalPath);
-        }
-        if (fs.existsSync(jsCodeLocalPath)) {
-          fs.unlinkSync(jsCodeLocalPath);
-        }
-        return res.status(500).json({
-          success: false,
-          message: "GitHub js upload failed",
-        });
-      }
-      const jsCode = gitjsres.download_url
-
-      const project = await projectModel.create({
-        projectType: "jsProject",
-        uiTemplate: cloudResult.url,
-        htmlCode: htmlCode,
-        jsCode: jsCode
-      });
-
-      return res.json({
-        success: true,
-        message: "Uploaded successfully",
-        project
-
-      });
+      const uiTemplateLocalPath = req.files?.uiTemplate[0].path
+      const htmlLocalPath = req.files?.htmlCode[0].path
+      const jsLocalPath = req.files?.jsCode[0].path
+console.log("Line no 123\n",uiTemplateLocalPath,htmlLocalPath, jsLocalPath)
+      const cloudinaryres = await uploadFileOnCloud(uiTemplateLocalPath)
+      console.log("Line no 125\n",cloudinaryres)
+      res.send({
+        success: true, 
+        message: "Uploades Success Full"
+      })
     } catch (error) {
-      console.log(error)
-      res.status(500).json({
+res.send({
         success: false,
-        message: "Internal Server Error"
+        message: "Uploades Success Fail"
       })
     }
+
 
   });
 

@@ -7,13 +7,13 @@ const uploadFileOnCloud = async (localPath) => {
     try {
         if (!localPath) return "err";
         // Upload the file to Cloudinary
-        
+        console.log("Line no 10", localPath)
         const result = await cloudinary.uploader.upload(localPath, {
             resource_type: "auto", // Automatically determine the resource type
             folder: "UiTemplate", // Specify the folder in Cloudinary
         });
         // Remove the local file after upload
-        
+        console.log("Line no 17", result)
         await fs.unlinkSync(localPath);
 
         console.log("File uploaded successfully:", result.secure_url);
